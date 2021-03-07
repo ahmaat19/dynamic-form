@@ -5,21 +5,23 @@ const App = () => {
     { firstName: '', lastName: '' },
   ])
 
+  const handleAddField = () => {
+    setInputFields([...inputFields, { firstName: '', lastName: '' }])
+  }
+
+  const handleRemoveField = (index) => {
+    const allOldInputFields = [...inputFields]
+    allOldInputFields.splice(index, 1)
+    setInputFields(allOldInputFields)
+  }
+
   const handleInputChange = (e, index) => {
     const { name, value } = e.target
-    const list = [...inputFields]
-    list[index][name] = value
-    setInputFields(list)
-  }
 
-  const handleRemoveClick = (index) => {
-    const list = [...inputFields]
-    list.splice(index, 1)
-    setInputFields(list)
-  }
+    const allOldInputFields = [...inputFields]
+    allOldInputFields[index][name] = value
 
-  const handleAddClick = () => {
-    setInputFields([...inputFields, { firstName: '', lastName: '' }])
+    setInputFields(allOldInputFields)
   }
 
   const handleSubmit = (e) => {
@@ -28,64 +30,60 @@ const App = () => {
   }
 
   return (
-    <div className='bg-info vh-100 d-flex justify-content-center align-items-center'>
-      <form onSubmit={handleSubmit}>
-        <h1 className='text-center text-secondary'>
-          Dynamic Form With Controlled Components
-        </h1>
-        {inputFields.map((field, index) => (
-          <div className='row my-3' key={index}>
-            <div className='col-5'>
+    <div class='d-flex justify-content-center align-items-center vh-100 bg-dark'>
+      <form onSubmit={(e) => handleSubmit(e)}>
+        {inputFields.map((inputField, index) => (
+          <div key={index} className='row m-2'>
+            <div className='col'>
               <input
-                className='form-control'
                 autoFocus
+                type='text'
+                className='form-control m-1 border border-success shadow-none '
+                placeholder='First Name'
                 name='firstName'
-                placeholder='Enter First Name'
-                value={field.firstName}
+                value={inputField.firstName}
                 onChange={(e) => handleInputChange(e, index)}
               />
             </div>
-            <div className='col-5'>
+            <div className='col'>
               <input
-                className='form-control'
+                type='text'
+                className='form-control m-1 border border-success shadow-none '
+                placeholder='Last Name'
                 name='lastName'
-                placeholder='Enter Last Name'
-                value={field.lastName}
+                value={inputField.lastName}
                 onChange={(e) => handleInputChange(e, index)}
               />
             </div>
-            <div className='col-2'>
+            <div className='col'>
               <div className='btn-group'>
-                {inputFields.length !== 1 && (
+                {inputFields.length > 1 && (
                   <button
+                    onClick={() => handleRemoveField(index)}
                     type='button'
-                    className='btn btn-danger '
-                    onClick={() => handleRemoveClick(index)}
+                    className='btn btn-danger  mx-1'
                   >
-                    Remove
+                    REMOVE
                   </button>
                 )}
+
                 {inputFields.length - 1 === index && (
                   <button
+                    onClick={() => handleAddField()}
                     type='button'
-                    className='btn mx-1 btn-primary '
-                    onClick={handleAddClick}
+                    className='btn btn-primary  mx-1'
                   >
-                    Add
+                    ADD
                   </button>
                 )}
               </div>
             </div>
           </div>
         ))}
-        <div className='col-12'>
-          <button
-            className='btn btn-success d-block form-control'
-            type='submit'
-          >
-            Submit
-          </button>
-        </div>
+        <button type='submit' className='btn btn-success m-4'>
+          SUBMIT
+        </button>
+        <div className='modal-footer text-light '></div>
       </form>
     </div>
   )
